@@ -24,6 +24,8 @@ fun DictionaryScreen(navController: NavHostController) {
         Spacer(Modifier.height(8.dp))
         ColorList(colors = filterColorsByLetter(colorList, selectedLetter), navController)
     }
+    Text("🟢 Dictionnaire actif", color = Color.Green)
+
 }
 
 @Composable

@@ -7,6 +7,7 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import com.example.magenta.data.colorList
 import com.example.magenta.ui.screens.ColorDetailScreen
+import com.example.magenta.ui.screens.DictionaryScreen
 
 @Composable
 fun AppNavigation(navController: NavHostController) {
