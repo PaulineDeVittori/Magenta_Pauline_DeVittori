@@ -1,5 +1,6 @@
 package com.example.magenta
 
+import android.annotation.SuppressLint
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
@@ -9,11 +10,12 @@ import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.navigation.compose.rememberNavController
-import com.example.magenta.ui.navigation.AppNavigation
-import com.example.magenta.ui.navigation.BottomNavigationBar
+import com.example.magenta.navigation.AppNavigation
+import com.example.magenta.navigation.BottomNavigationBar
 import com.example.magenta.ui.theme.MagentaTheme
 
 class MainActivity : ComponentActivity() {
+    @SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
