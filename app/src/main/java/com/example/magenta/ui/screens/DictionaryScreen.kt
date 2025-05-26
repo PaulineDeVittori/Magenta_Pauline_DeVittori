@@ -14,18 +14,17 @@ import androidx.compose.ui.unit.dp
 import androidx.navigation.NavHostController
 import com.example.magenta.data.colorList
 import com.example.magenta.model.ColorInfo
+import androidx.lifecycle.viewmodel.compose.viewModel
+import com.example.magenta.viewmodel.ColorViewModel
 
 @Composable
-fun DictionaryScreen(navController: NavHostController) {
-    var selectedLetter by remember { mutableStateOf<Char?>(null) }
+fun DictionaryScreen(
+    navController: NavHostController,
+    viewModel: ColorViewModel = viewModel()
+) {
+    val colorList by viewModel.colors.collectAsState()
 
-    Column(modifier = Modifier.fillMaxSize().padding(16.dp)) {
-        LetterFilterBar(selectedLetter) { selectedLetter = it }
-        Spacer(Modifier.height(8.dp))
-        ColorList(colors = filterColorsByLetter(colorList, selectedLetter), navController)
-    }
-    Text("🟢 Dictionnaire actif", color = Color.Green)
-
+    // Affiche ta liste de couleurs ici
 }
 
 @Composable
