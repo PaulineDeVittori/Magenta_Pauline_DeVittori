@@ -15,6 +15,7 @@ import androidx.navigation.NavHostController
 import com.example.magenta.data.colorList
 import com.example.magenta.model.ColorInfo
 import androidx.lifecycle.viewmodel.compose.viewModel
+import com.example.magenta.model.ColorEntity
 import com.example.magenta.viewmodel.ColorViewModel
 
 @Composable
@@ -24,7 +25,19 @@ fun DictionaryScreen(
 ) {
     val colorList by viewModel.colors.collectAsState()
 
-    // Affiche ta liste de couleurs ici
+    var selectedLetter by remember { mutableStateOf<Char?>(null) }
+
+    val colorInfoList = colorList.map { it.toColorInfo() }
+    val filteredColors = filterColorsByLetter(colorInfoList, selectedLetter)
+
+    Column(modifier = Modifier
+        .fillMaxSize()
+        .padding(16.dp)) {
+
+        LetterFilterBar(selectedLetter) { selectedLetter = it }
+        Spacer(Modifier.height(8.dp))
+        ColorList(colors = filteredColors, navController = navController)
+    }
 }
 
 @Composable
@@ -66,6 +79,14 @@ fun ColorList(colors: List<ColorInfo>, navController: NavHostController) {
             }
         }
     }
+}
+
+fun ColorEntity.toColorInfo(): ColorInfo {
+    return ColorInfo(
+        name = this.name,
+        hex = this.hex,
+        rgb = Triple(this.red, this.green, this.blue)
+    )
 }
 
 @Composable

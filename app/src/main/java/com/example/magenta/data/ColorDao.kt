@@ -15,5 +15,19 @@ interface ColorDao {
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     suspend fun insertAll(colors: List<ColorEntity>)
+
+    @Insert(onConflict = OnConflictStrategy.REPLACE)
+    suspend fun insertColor(color: ColorEntity)
+
+    @Query("""
+        SELECT * FROM colors 
+        WHERE name LIKE '%' || :query || '%' 
+        OR hex LIKE '%' || :query || '%' 
+        OR CAST(red AS TEXT) || ',' || CAST(green AS TEXT) || ',' || CAST(blue AS TEXT) LIKE '%' || :query || '%'
+    """)
+    suspend fun searchColors(query: String): List<ColorEntity>
+
+    @Delete
+    suspend fun deleteColor(color: ColorEntity)
 }
 
