@@ -40,12 +40,28 @@ class ColorViewModel : ViewModel() {
         }
     }
 
+    private val colorCache = mutableMapOf<String, ColorEntity>()
+
     fun getColorByName(name: String, onResult: (ColorEntity?) -> Unit) {
         viewModelScope.launch {
-            val color = colors.value.find { it.name.equals(name, ignoreCase = true) }
-            onResult(color)
+            val key = name.lowercase()
+            val cached = colorCache[key]
+            if (cached != null) {
+                onResult(cached)
+            } else {
+                val localColor = colors.value.find { it.name.equals(name, ignoreCase = true) }
+                if (localColor != null) {
+                    colorCache[key] = localColor
+                    onResult(localColor)
+                } else {
+                    val remoteColor = repository.getColorByName(name)
+                    if (remoteColor != null) colorCache[key] = remoteColor
+                    onResult(remoteColor)
+                }
+            }
         }
     }
+
 
 
 }

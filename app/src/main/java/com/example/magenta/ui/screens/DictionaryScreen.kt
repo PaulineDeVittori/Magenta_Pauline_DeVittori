@@ -14,8 +14,10 @@ import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavHostController
 import com.example.magenta.model.ColorEntity
+import com.example.magenta.ui.components.ColorCard
 import com.example.magenta.viewmodel.ColorViewModel
 
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun DictionaryScreen(
     navController: NavHostController,
@@ -26,17 +28,32 @@ fun DictionaryScreen(
 
     val filteredColors = filterColorsByLetter(colorList, selectedLetter)
 
-    Column(modifier = Modifier
-        .fillMaxSize()
-        .padding(16.dp)) {
-
-        LetterFilterBar(selectedLetter) { selectedLetter = it }
-
-        Spacer(modifier = Modifier.height(8.dp))
-
-        ColorList(colors = filteredColors, navController = navController)
-    }
+    Scaffold(
+        topBar = {
+            CenterAlignedTopAppBar(
+                title = {
+                    Text(
+                        "Magenta",
+                        color = Color(0xFF880E4F) // rose foncé
+                    )
+                }
+            )
+        },
+        content = { paddingValues ->
+            Column(
+                modifier = Modifier
+                    .padding(paddingValues)  // important pour éviter que le contenu soit sous la barre
+                    .padding(horizontal = 16.dp)
+                    .fillMaxSize()
+            ) {
+                LetterFilterBar(selectedLetter) { selectedLetter = it }
+                Spacer(modifier = Modifier.height(8.dp))
+                ColorList(colors = filteredColors, navController = navController)
+            }
+        }
+    )
 }
+
 
 @Composable
 fun LetterFilterBar(selected: Char?, onLetterSelected: (Char?) -> Unit) {
@@ -79,26 +96,3 @@ fun ColorList(colors: List<ColorEntity>, navController: NavHostController) {
     }
 }
 
-@Composable
-fun ColorCard(color: ColorEntity, onClick: () -> Unit) {
-    Card(
-        modifier = Modifier
-            .fillMaxWidth()
-            .padding(vertical = 4.dp)
-            .clickable(onClick = onClick)
-    ) {
-        Row(modifier = Modifier.padding(8.dp)) {
-            Box(
-                modifier = Modifier
-                    .size(40.dp)
-                    .background(Color(android.graphics.Color.parseColor(color.hex)))
-            )
-            Spacer(Modifier.width(16.dp))
-            Column {
-                Text(text = color.name)
-                Text(text = "HEX: ${color.hex}")
-                Text(text = "RGB: ${color.red}, ${color.green}, ${color.blue}")
-            }
-        }
-    }
-}

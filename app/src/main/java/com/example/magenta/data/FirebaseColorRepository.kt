@@ -17,6 +17,11 @@ class FirebaseColorRepository {
         }
     }
 
+    suspend fun getColorByName(name: String): ColorEntity? {
+        val doc = db.collection("colors").document(name).get().await()
+        return if (doc.exists()) doc.toObject(ColorEntity::class.java) else null
+    }
+
     suspend fun searchColors(query: String): List<ColorEntity> {
         val all = getAllColors()
         return all.filter {

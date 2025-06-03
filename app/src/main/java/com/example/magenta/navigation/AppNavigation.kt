@@ -8,11 +8,12 @@ import androidx.navigation.compose.composable
 import com.example.magenta.data.colorList
 import com.example.magenta.ui.screens.ColorDetailScreen
 import com.example.magenta.ui.screens.DictionaryScreen
+import com.example.magenta.ui.screens.HomeScreen
 
 @Composable
 fun AppNavigation(navController: NavHostController) {
     NavHost(navController = navController, startDestination = BottomNavItem.Home.route) {
-        composable(BottomNavItem.Home.route) { HomeScreen() }
+        composable(BottomNavItem.Home.route) { HomeScreen(navController) }
         composable(BottomNavItem.Dictionary.route) { DictionaryScreen(navController) }
         composable(BottomNavItem.Search.route) { SearchScreen() }
         composable(BottomNavItem.Random.route) { RandomColorScreen() }
