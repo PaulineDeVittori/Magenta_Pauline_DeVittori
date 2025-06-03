@@ -19,13 +19,8 @@ fun AppNavigation(navController: NavHostController) {
         composable(BottomNavItem.Favorites.route) { FavoritesScreen() }
 
         composable("detail/{colorName}") { backStackEntry ->
-            val colorName = backStackEntry.arguments?.getString("colorName") ?: return@composable
-            val color = colorList.find { it.name == colorName }
-            if (color != null) {
-                ColorDetailScreen(color)
-            } else {
-                Text("Couleur introuvable")
-            }
+            val colorName = backStackEntry.arguments?.getString("colorName") ?: ""
+            ColorDetailScreen(colorName = colorName, navController = navController)
         }
     }
 }

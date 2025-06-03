@@ -4,8 +4,8 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
-import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.lazy.items
+import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
@@ -14,10 +14,8 @@ import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavHostController
 import com.example.magenta.model.ColorEntity
-import com.example.magenta.model.ColorInfo
 import com.example.magenta.viewmodel.ColorViewModel
 
-@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun DictionaryScreen(
     navController: NavHostController,
@@ -26,43 +24,19 @@ fun DictionaryScreen(
     val colorList by viewModel.colors.collectAsState()
     var selectedLetter by remember { mutableStateOf<Char?>(null) }
 
-    val colorInfoList = colorList.map { it.toColorInfo() }
-    val filteredColors = filterColorsByLetter(colorInfoList, selectedLetter)
+    val filteredColors = filterColorsByLetter(colorList, selectedLetter)
 
-    Scaffold(
-        topBar = {
-            CenterAlignedTopAppBar(
-                title = {
-                    Text(
-                        text = "Magenta",
-                        color = Color(0xFF8B008B) // Rose foncé
-                    )
-                }
-            )
-        }
-    ) { innerPadding ->
-        LazyColumn(
-            modifier = Modifier
-                .fillMaxSize()
-                .padding(innerPadding)
-                .padding(horizontal = 16.dp)
-                .padding(bottom = 80.dp) // 👈 Ajout pour laisser de la place à la barre de navigation
-        ) {
-            item {
-                Spacer(modifier = Modifier.height(8.dp))
-                LetterFilterBar(selectedLetter) { selectedLetter = it }
-                Spacer(modifier = Modifier.height(8.dp))
-            }
+    Column(modifier = Modifier
+        .fillMaxSize()
+        .padding(16.dp)) {
 
-            items(filteredColors) { color ->
-                ColorCard(color) {
-                    navController.navigate("detail/${color.name}")
-                }
-            }
-        }
+        LetterFilterBar(selectedLetter) { selectedLetter = it }
+
+        Spacer(modifier = Modifier.height(8.dp))
+
+        ColorList(colors = filteredColors, navController = navController)
     }
 }
-
 
 @Composable
 fun LetterFilterBar(selected: Char?, onLetterSelected: (Char?) -> Unit) {
@@ -90,20 +64,23 @@ fun FilterChip(isSelected: Boolean, text: String, onClick: () -> Unit) {
     )
 }
 
-fun filterColorsByLetter(list: List<ColorInfo>, letter: Char?): List<ColorInfo> {
+fun filterColorsByLetter(list: List<ColorEntity>, letter: Char?): List<ColorEntity> {
     return if (letter == null) list else list.filter { it.name.startsWith(letter, ignoreCase = true) }
 }
 
-fun ColorEntity.toColorInfo(): ColorInfo {
-    return ColorInfo(
-        name = this.name,
-        hex = this.hex,
-        rgb = Triple(this.red, this.green, this.blue)
-    )
+@Composable
+fun ColorList(colors: List<ColorEntity>, navController: NavHostController) {
+    LazyColumn {
+        items(colors) { color ->
+            ColorCard(color = color) {
+                navController.navigate("detail/${color.name}")
+            }
+        }
+    }
 }
 
 @Composable
-fun ColorCard(color: ColorInfo, onClick: () -> Unit) {
+fun ColorCard(color: ColorEntity, onClick: () -> Unit) {
     Card(
         modifier = Modifier
             .fillMaxWidth()
@@ -120,7 +97,7 @@ fun ColorCard(color: ColorInfo, onClick: () -> Unit) {
             Column {
                 Text(text = color.name)
                 Text(text = "HEX: ${color.hex}")
-                Text(text = "RGB: ${color.rgb.toList()}")
+                Text(text = "RGB: ${color.red}, ${color.green}, ${color.blue}")
             }
         }
     }

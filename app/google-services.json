@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "246408700322",
+    "project_id": "basemagenta-9186d",
+    "storage_bucket": "basemagenta-9186d.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:246408700322:android:3e5ab6fe7eba73885452fb",
+        "android_client_info": {
+          "package_name": "com.example.magenta"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBV4o_5W7EXHvrLnetJ0mw0XFDtwpOke5M"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

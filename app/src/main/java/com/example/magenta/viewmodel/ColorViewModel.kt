@@ -1,39 +1,51 @@
 package com.example.magenta.viewmodel
 
-import android.app.Application
-import androidx.lifecycle.AndroidViewModel
+import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.example.magenta.data.AppDatabase
+import com.example.magenta.data.FirebaseColorRepository
 import com.example.magenta.model.ColorEntity
 import kotlinx.coroutines.flow.*
 import kotlinx.coroutines.launch
 
-class ColorViewModel(application: Application) : AndroidViewModel(application) {
-    private val dao = AppDatabase.getDatabase(application).colorDao()
+class ColorViewModel : ViewModel() {
 
-    // Liste complète de toutes les couleurs (utilisée pour le dictionnaire par ex.)
-    val colors: StateFlow<List<ColorEntity>> = dao.getAllColors()
-        .stateIn(
-            scope = viewModelScope,
-            started = SharingStarted.WhileSubscribed(5000),
-            initialValue = emptyList()
-        )
+    private val repository = FirebaseColorRepository()
 
-    // 🔍 Résultats de recherche
+    private val _colors = MutableStateFlow<List<ColorEntity>>(emptyList())
+    val colors: StateFlow<List<ColorEntity>> = _colors.asStateFlow()
+
     private val _searchResults = MutableStateFlow<List<ColorEntity>>(emptyList())
     val searchResults: StateFlow<List<ColorEntity>> = _searchResults.asStateFlow()
 
-    // 🔁 Fonction pour rechercher
-    fun searchColors(query: String) {
+    init {
+        loadAllColors()
+    }
+
+    fun loadAllColors() {
         viewModelScope.launch {
-            _searchResults.value = dao.searchColors(query)
+            _colors.value = repository.getAllColors()
         }
     }
 
-    // ➕ Pré-remplissage
-    fun insertAllColors(colorList: List<ColorEntity>) {
+    fun searchColors(query: String) {
         viewModelScope.launch {
-            dao.insertAll(colorList)
+            _searchResults.value = repository.searchColors(query)
         }
     }
+
+    fun insertAllColors(colorList: List<ColorEntity>) {
+        viewModelScope.launch {
+            repository.insertColors(colorList)
+            loadAllColors() // refresh
+        }
+    }
+
+    fun getColorByName(name: String, onResult: (ColorEntity?) -> Unit) {
+        viewModelScope.launch {
+            val color = colors.value.find { it.name.equals(name, ignoreCase = true) }
+            onResult(color)
+        }
+    }
+
+
 }
