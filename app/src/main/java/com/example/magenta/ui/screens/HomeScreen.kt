@@ -58,9 +58,11 @@ fun HomeScreen(
 
                 LazyColumn {
                     items(latestColors) { color ->
-                        ColorCard(color) {
-                            navController.navigate("detail/${color.name}")
-                        }
+                        ColorCard(
+                            color = color,
+                            onClick = { navController.navigate("detail/${color.name}") },
+                            onToggleFavorite = { viewModel.toggleFavorite(it) }
+                        )
                     }
                 }
             }

@@ -86,12 +86,14 @@ fun filterColorsByLetter(list: List<ColorEntity>, letter: Char?): List<ColorEnti
 }
 
 @Composable
-fun ColorList(colors: List<ColorEntity>, navController: NavHostController) {
+fun ColorList(colors: List<ColorEntity>, navController: NavHostController, viewModel: ColorViewModel = viewModel()) {
     LazyColumn {
         items(colors) { color ->
-            ColorCard(color = color) {
-                navController.navigate("detail/${color.name}")
-            }
+            ColorCard(
+                color = color,
+                onClick = { navController.navigate("detail/${color.name}") },
+                onToggleFavorite = { viewModel.toggleFavorite(it) } // <-- à définir dans ton ViewModel
+            )
         }
     }
 }

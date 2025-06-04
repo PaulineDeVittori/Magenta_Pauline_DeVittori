@@ -23,7 +23,9 @@ class ColorViewModel : ViewModel() {
 
     fun loadAllColors() {
         viewModelScope.launch {
-            _colors.value = repository.getAllColors()
+            val all = repository.getAllColors()
+            _colors.value = all
+            _favorites.value = all.filter { it.isFavorite }
         }
     }
 
@@ -58,6 +60,24 @@ class ColorViewModel : ViewModel() {
                     if (remoteColor != null) colorCache[key] = remoteColor
                     onResult(remoteColor)
                 }
+            }
+        }
+    }
+
+
+    private val _favorites = MutableStateFlow<List<ColorEntity>>(emptyList())
+    val favorites: StateFlow<List<ColorEntity>> = _favorites.asStateFlow()
+
+    fun toggleFavorite(color: ColorEntity) {
+        viewModelScope.launch {
+            val updated = color.copy(isFavorite = !color.isFavorite)
+            val current = _colors.value.toMutableList()
+            val index = current.indexOfFirst { it.name == color.name }
+            if (index != -1) {
+                current[index] = updated
+                _colors.value = current
+                _favorites.value = current.filter { it.isFavorite }
+                repository.updateFavorite(updated)
             }
         }
     }

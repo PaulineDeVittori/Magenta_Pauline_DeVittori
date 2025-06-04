@@ -36,4 +36,12 @@ class FirebaseColorRepository {
             colorCollection.document(it.name).set(it).await()
         }
     }
+
+    val firestore = FirebaseFirestore.getInstance()
+
+    suspend fun updateFavorite(color: ColorEntity) {
+        val docRef = firestore.collection("colors").document(color.name)
+        docRef.set(color).await()  // remplace entièrement l'objet
+    }
+
 }
