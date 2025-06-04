@@ -33,7 +33,7 @@ class MainActivity : ComponentActivity() {
                             title = {
                                 Text(
                                     text = "Magenta",
-                                    color = Color(0xFFAD1457) // Rose foncé
+                                    color = Color(0xFFAD1457)
                                 )
                             }
                         )

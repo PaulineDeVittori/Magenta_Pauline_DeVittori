@@ -41,7 +41,7 @@ class FirebaseColorRepository {
 
     suspend fun updateFavorite(color: ColorEntity) {
         val docRef = firestore.collection("colors").document(color.name)
-        docRef.set(color).await()  // remplace entièrement l'objet
+        docRef.set(color).await()
     }
 
 }

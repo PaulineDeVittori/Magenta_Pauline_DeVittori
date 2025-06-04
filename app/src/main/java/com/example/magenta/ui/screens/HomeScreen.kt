@@ -64,7 +64,7 @@ fun HomeScreen(
             }
 
             item {
-                Spacer(modifier = Modifier.height(80.dp)) // pour éviter le chevauchement avec la BottomNavBar
+                Spacer(modifier = Modifier.height(80.dp))
             }
         }
     }

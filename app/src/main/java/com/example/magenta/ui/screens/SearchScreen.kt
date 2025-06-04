@@ -1,6 +1,5 @@
 package com.example.magenta.ui.screens
 
-import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Search
@@ -59,10 +58,10 @@ fun SearchScreen(
                     placeholder = { Text("Rechercher...") },
                     singleLine = true,
                     colors = TextFieldDefaults.textFieldColors(
-                        containerColor = Color(0xFFFCE4EC),           // Fond de la barre de recherche (rose clair par ex.)
-                        focusedIndicatorColor = Color(0xFF880E4F),    // Couleur de la ligne quand le champ est focus
-                        unfocusedIndicatorColor = Color(0xFFC46888),  // Couleur de la ligne quand le champ est flouté
-                        cursorColor = Color(0xFF880E4F),              // Couleur du curseur
+                        containerColor = Color(0xFFFCE4EC),
+                        focusedIndicatorColor = Color(0xFF880E4F),
+                        unfocusedIndicatorColor = Color(0xFFC46888),
+                        cursorColor = Color(0xFF880E4F),
                     )
                 )
                 IconButton(onClick = {

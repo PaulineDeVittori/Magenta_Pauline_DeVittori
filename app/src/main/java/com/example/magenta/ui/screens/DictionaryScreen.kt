@@ -1,7 +1,5 @@
 package com.example.magenta.ui.screens
 
-import androidx.compose.foundation.background
-import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
@@ -34,7 +32,7 @@ fun DictionaryScreen(
                 title = {
                     Text(
                         "Magenta",
-                        color = Color(0xFF880E4F) // rose foncé
+                        color = Color(0xFF880E4F)
                     )
                 }
             )
@@ -42,7 +40,7 @@ fun DictionaryScreen(
         content = { paddingValues ->
             Column(
                 modifier = Modifier
-                    .padding(paddingValues)  // important pour éviter que le contenu soit sous la barre
+                    .padding(paddingValues)
                     .padding(horizontal = 16.dp)
                     .fillMaxSize()
             ) {

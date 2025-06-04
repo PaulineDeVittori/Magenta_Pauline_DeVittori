@@ -19,7 +19,7 @@ fun BottomNavigationBar(navController: NavHostController) {
     )
 
     NavigationBar(
-        containerColor = Color(0xFFFCE4EC) // Fond rose clair
+        containerColor = Color(0xFFFCE4EC)
     ) {
         val navBackStackEntry by navController.currentBackStackEntryAsState()
         val currentDestination = navBackStackEntry?.destination
@@ -46,9 +46,9 @@ fun BottomNavigationBar(navController: NavHostController) {
                     }
                 },
                 colors = NavigationBarItemDefaults.colors(
-                    selectedIconColor = Color(0xFF880E4F),    // Rose foncé
-                    unselectedIconColor = Color(0xFFC46888),  // Rose pâle
-                    indicatorColor = Color(0xFFF8BBD0)        // Couleur de l'indicateur (facultatif)
+                    selectedIconColor = Color(0xFF880E4F),
+                    unselectedIconColor = Color(0xFFC46888),
+                    indicatorColor = Color(0xFFF8BBD0)
                 )
             )
         }

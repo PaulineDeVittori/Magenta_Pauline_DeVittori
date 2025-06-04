@@ -25,7 +25,6 @@ fun ColorDetailScreen(
 ) {
     var color by remember { mutableStateOf<ColorEntity?>(null) }
 
-    // Charger la couleur à partir de Firestore via le ViewModel
     LaunchedEffect(colorName) {
         viewModel.getColorByName(colorName) {
             color = it
@@ -37,12 +36,11 @@ fun ColorDetailScreen(
             topBar = {
                 CenterAlignedTopAppBar(
                     title = {
-                        Text("Magenta", color = Color(0xFF8B008B)) // Rose foncé
+                        Text("Magenta", color = Color(0xFF8B008B))
                     },
                     actions = {
                         IconButton(onClick = {
                             viewModel.toggleFavorite(colorEntity)
-                            // Mettre à jour l'état local pour refléter le changement
                             color = colorEntity.copy(isFavorite = !colorEntity.isFavorite)
                         }) {
                             Icon(
@@ -74,7 +72,6 @@ fun ColorDetailScreen(
             }
         }
     } ?: run {
-        // Afficher un indicateur de chargement
         Box(modifier = Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
             CircularProgressIndicator()
         }

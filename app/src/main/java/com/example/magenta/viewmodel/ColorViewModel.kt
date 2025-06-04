@@ -38,7 +38,7 @@ class ColorViewModel : ViewModel() {
     fun insertAllColors(colorList: List<ColorEntity>) {
         viewModelScope.launch {
             repository.insertColors(colorList)
-            loadAllColors() // refresh
+            loadAllColors()
         }
     }
 
@@ -82,6 +82,19 @@ class ColorViewModel : ViewModel() {
         }
     }
 
-
-
+    fun getRandomColor(onSuccess: (ColorEntity) -> Unit, onError: (String) -> Unit) {
+        viewModelScope.launch {
+            try {
+                val allColors = repository.getAllColors()
+                if (allColors.isNotEmpty()) {
+                    val randomColor = allColors.random()
+                    onSuccess(randomColor)
+                } else {
+                    onError("Aucune couleur disponible")
+                }
+            } catch (e: Exception) {
+                onError(e.localizedMessage ?: "Erreur inconnue")
+            }
+        }
+    }
 }
