@@ -57,9 +57,11 @@ fun DictionaryScreen(
 
 @Composable
 fun LetterFilterBar(selected: Char?, onLetterSelected: (Char?) -> Unit) {
-    val letters = ('A'..'Z').toList()
+    val letters = ('A'..'P').toList()
 
-    LazyRow {
+    LazyRow(
+        modifier = Modifier.padding(vertical = 8.dp)
+    ) {
         item {
             FilterChip(selected == null, "All") { onLetterSelected(null) }
         }
@@ -86,15 +88,29 @@ fun filterColorsByLetter(list: List<ColorEntity>, letter: Char?): List<ColorEnti
 }
 
 @Composable
-fun ColorList(colors: List<ColorEntity>, navController: NavHostController, viewModel: ColorViewModel = viewModel()) {
-    LazyColumn {
+fun ColorList(
+    colors: List<ColorEntity>,
+    navController: NavHostController,
+    viewModel: ColorViewModel = viewModel()
+) {
+    LazyColumn(
+        modifier = Modifier
+            .fillMaxSize()
+            .padding(bottom = 80.dp),
+        verticalArrangement = Arrangement.spacedBy(8.dp)
+    ) {
         items(colors) { color ->
             ColorCard(
                 color = color,
                 onClick = { navController.navigate("detail/${color.name}") },
-                onToggleFavorite = { viewModel.toggleFavorite(it) } // <-- à définir dans ton ViewModel
+                onToggleFavorite = { viewModel.toggleFavorite(it) }
             )
+        }
+
+        item {
+            Spacer(modifier = Modifier.height(16.dp))
         }
     }
 }
+
 
