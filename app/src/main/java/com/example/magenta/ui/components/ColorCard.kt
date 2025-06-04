@@ -31,7 +31,8 @@ fun ColorCard(
         Row(modifier = Modifier.padding(8.dp)) {
             Box(
                 modifier = Modifier
-                    .size(40.dp)
+                    .width(120.dp)
+                    .height(80.dp)
                     .background(Color(android.graphics.Color.parseColor(color.hex)))
             )
             Spacer(Modifier.width(16.dp))
