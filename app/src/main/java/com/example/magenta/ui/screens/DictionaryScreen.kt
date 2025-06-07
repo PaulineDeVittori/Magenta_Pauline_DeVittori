@@ -23,7 +23,6 @@ fun DictionaryScreen(
 ) {
     val colorList by viewModel.colors.collectAsState()
     var selectedLetter by remember { mutableStateOf<Char?>(null) }
-
     val filteredColors = filterColorsByLetter(colorList, selectedLetter)
 
     Scaffold(
@@ -91,6 +90,8 @@ fun ColorList(
     navController: NavHostController,
     viewModel: ColorViewModel = viewModel()
 ) {
+    val favorites = viewModel.favorites.collectAsState().value
+
     LazyColumn(
         modifier = Modifier
             .fillMaxSize()
@@ -100,8 +101,9 @@ fun ColorList(
         items(colors) { color ->
             ColorCard(
                 color = color,
+                isFavorite = favorites.contains(color.name), // <- correction ici
                 onClick = { navController.navigate("detail/${color.name}") },
-                onToggleFavorite = { viewModel.toggleFavorite(it) }
+                onToggleFavorite = { viewModel.toggleFavorite(color) }
             )
         }
 

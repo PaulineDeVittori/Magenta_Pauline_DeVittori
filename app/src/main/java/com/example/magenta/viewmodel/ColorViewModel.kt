@@ -1,5 +1,8 @@
 package com.example.magenta.viewmodel
 
+import android.app.Application
+import android.preference.PreferenceManager
+import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.magenta.data.FirebaseColorRepository
@@ -7,7 +10,10 @@ import com.example.magenta.model.ColorEntity
 import kotlinx.coroutines.flow.*
 import kotlinx.coroutines.launch
 
-class ColorViewModel : ViewModel() {
+class ColorViewModel(application: Application) : AndroidViewModel(application) {
+
+    private val prefs = PreferenceManager.getDefaultSharedPreferences(application)
+    private val FAVORITES_KEY = "favorite_colors"
 
     private val repository = FirebaseColorRepository()
 
@@ -17,16 +23,41 @@ class ColorViewModel : ViewModel() {
     private val _searchResults = MutableStateFlow<List<ColorEntity>>(emptyList())
     val searchResults: StateFlow<List<ColorEntity>> = _searchResults.asStateFlow()
 
+    private val _favorites = MutableStateFlow<Set<String>>(emptySet()) // noms des couleurs
+    val favorites: StateFlow<Set<String>> = _favorites.asStateFlow()
+
     init {
+        loadFavoritesFromPrefs()
         loadAllColors()
+    }
+
+    private fun loadFavoritesFromPrefs() {
+        _favorites.value = prefs.getStringSet(FAVORITES_KEY, emptySet()) ?: emptySet()
+    }
+
+    private fun saveFavoritesToPrefs(favs: Set<String>) {
+        prefs.edit().putStringSet(FAVORITES_KEY, favs).apply()
     }
 
     fun loadAllColors() {
         viewModelScope.launch {
             val all = repository.getAllColors()
             _colors.value = all
-            _favorites.value = all.filter { it.isFavorite }
         }
+    }
+
+    fun toggleFavorite(color: ColorEntity) {
+        val currentFavs = _favorites.value.toMutableSet()
+        val colorName = color.name
+
+        if (currentFavs.contains(colorName)) {
+            currentFavs.remove(colorName)
+        } else {
+            currentFavs.add(colorName)
+        }
+
+        _favorites.value = currentFavs
+        saveFavoritesToPrefs(currentFavs)
     }
 
     fun searchColors(query: String) {
@@ -64,24 +95,6 @@ class ColorViewModel : ViewModel() {
         }
     }
 
-
-    private val _favorites = MutableStateFlow<List<ColorEntity>>(emptyList())
-    val favorites: StateFlow<List<ColorEntity>> = _favorites.asStateFlow()
-
-    fun toggleFavorite(color: ColorEntity) {
-        viewModelScope.launch {
-            val updated = color.copy(isFavorite = !color.isFavorite)
-            val current = _colors.value.toMutableList()
-            val index = current.indexOfFirst { it.name == color.name }
-            if (index != -1) {
-                current[index] = updated
-                _colors.value = current
-                _favorites.value = current.filter { it.isFavorite }
-                repository.updateFavorite(updated)
-            }
-        }
-    }
-
     fun getRandomColor(onSuccess: (ColorEntity) -> Unit, onError: (String) -> Unit) {
         viewModelScope.launch {
             try {
@@ -98,3 +111,4 @@ class ColorViewModel : ViewModel() {
         }
     }
 }
+

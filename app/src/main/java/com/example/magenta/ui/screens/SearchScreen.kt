@@ -23,7 +23,7 @@ fun SearchScreen(
 ) {
     val searchQuery = remember { mutableStateOf("") }
     val searchResults by viewModel.searchResults.collectAsState()
-
+    val favorites = viewModel.favorites.collectAsState().value
     Scaffold(
         topBar = {
             CenterAlignedTopAppBar(
@@ -80,8 +80,9 @@ fun SearchScreen(
                 items(searchResults) { color ->
                     ColorCard(
                         color = color,
+                        isFavorite = favorites.contains(color.name), // <- correction ici
                         onClick = { navController.navigate("detail/${color.name}") },
-                        onToggleFavorite = { viewModel.toggleFavorite(it) }
+                        onToggleFavorite = { viewModel.toggleFavorite(color) }
                     )
                 }
             }

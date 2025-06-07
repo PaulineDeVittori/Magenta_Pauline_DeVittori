@@ -19,9 +19,10 @@ import com.example.magenta.model.ColorEntity
 @Composable
 fun ColorCard(
     color: ColorEntity,
+    isFavorite: Boolean,
     onClick: () -> Unit,
-    onToggleFavorite: (ColorEntity) -> Unit
-)  {
+    onToggleFavorite: () -> Unit
+) {
     Card(
         modifier = Modifier
             .fillMaxWidth()
@@ -41,13 +42,12 @@ fun ColorCard(
                 Text(text = "HEX: ${color.hex}")
                 Text(text = "RGB: ${color.red}, ${color.green}, ${color.blue}")
             }
-            IconButton(onClick = { onToggleFavorite(color) }) {
+            IconButton(onClick = onToggleFavorite) {
                 Icon(
-                    imageVector = if (color.isFavorite) Icons.Default.Favorite else Icons.Default.FavoriteBorder,
+                    imageVector = if (isFavorite) Icons.Default.Favorite else Icons.Default.FavoriteBorder,
                     contentDescription = null
                 )
             }
         }
     }
 }
-

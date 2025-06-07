@@ -22,6 +22,7 @@ fun HomeScreen(
 ) {
     val colorList by viewModel.colors.collectAsState()
     val latestColors = colorList.takeLast(5).reversed()
+    val favorites = viewModel.favorites.collectAsState().value
 
     Scaffold(
         topBar = {
@@ -58,8 +59,9 @@ fun HomeScreen(
             items(latestColors) { color ->
                 ColorCard(
                     color = color,
+                    isFavorite = favorites.contains(color.name), // <- correction ici
                     onClick = { navController.navigate("detail/${color.name}") },
-                    onToggleFavorite = { viewModel.toggleFavorite(it) }
+                    onToggleFavorite = { viewModel.toggleFavorite(color) }
                 )
             }
 

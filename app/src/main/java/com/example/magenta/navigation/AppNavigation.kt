@@ -10,9 +10,10 @@ import com.example.magenta.ui.screens.HomeScreen
 import com.example.magenta.ui.screens.SearchScreen
 import com.example.magenta.ui.screens.FavoritesScreen
 import com.example.magenta.ui.screens.RandomColorScreen
+import com.example.magenta.viewmodel.ColorViewModel
 
 @Composable
-fun AppNavigation(navController: NavHostController) {
+fun AppNavigation(navController: NavHostController, viewModel: ColorViewModel){
     NavHost(navController = navController, startDestination = BottomNavItem.Home.route) {
         composable(BottomNavItem.Home.route) { HomeScreen(navController) }
         composable(BottomNavItem.Dictionary.route) { DictionaryScreen(navController) }
